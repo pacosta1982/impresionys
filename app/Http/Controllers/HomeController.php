@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Subsidio;
+
+
+class HomeController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+
+
+    public function index(Request $request)
+    {
+
+        /*var_dump($request->input('progid'));
+        var_dump($request->input('resid'));
+        var_dump($request->input('dateid'));
+        var_dump($request->input('cedula'));*/
+
+        if ($request->input('cedula')) {
+            $projects= Subsidio::where('CerPosCod', $request->input('cedula'))->paginate(15);
+        } else {
+            //var_dump('sin cedula');
+            if ($request->has(['progid', 'resid','dateid'])) {
+            
+                $s = $request->input('dateid');
+                $dt = new \DateTime($s);
+                $date = $dt->format('Y-m-d');
+                $projects = Subsidio::where('CerPrgCod', $request->input('progid'))
+                ->where('CerResNro','=', $request->input('resid'))
+                ->where('CerFeRe','=', $request->input('dateid'))
+                ->paginate(15);
+    
+            }else {
+                $projects = Subsidio::paginate(15);
+            }
+        }
+
+        $name = array(
+            1 => 'FONAVIS',
+            2 => 'VYA RENDA',
+            3 => 'CHE TAPYI',
+            4 => 'SEMBRANDO',
+            5 => 'EBY',
+            );
+            
+        
+        
+
+        $progid=$request->input('progid');
+        $resid=$request->input('resid');
+        $dateid=$request->input('dateid');
+        $cedula=$request->input('cedula');
+
+        return view('home',compact('projects','progid','dateid','resid','cedula','name'));
+    }
+}
