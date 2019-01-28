@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Subsidio;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\Settings;
+use App\Http\Controllers\SembrandoController;
 
 class FileController extends Controller
 {
@@ -27,6 +28,14 @@ class FileController extends Controller
         $encrypted = Crypt::encryptString('2');
         //var_dump($encrypted);
         return view('home');
+    }
+
+    public function imprimir($id){
+
+        //var_dump($id);
+        $controller =  new SembrandoController;
+        return $controller->generateDocx($id);
+
     }
     
     public function generateDocx($id)

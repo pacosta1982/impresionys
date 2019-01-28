@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Subsidio extends Model
+class Departamento extends Model
 {
-    protected $table = 'SHMCER';
+    protected $table = 'BAMDPT';
 
-    protected $primaryKey = 'CerNro';
+    protected $primaryKey = 'DptoId';
 
     public $incrementing = false;
     

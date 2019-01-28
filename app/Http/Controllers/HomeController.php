@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Subsidio;
-
+use App\Localidad;
+use App\Departamento;
 
 class HomeController extends Controller
 {
@@ -42,9 +43,11 @@ class HomeController extends Controller
                 $s = $request->input('dateid');
                 $dt = new \DateTime($s);
                 $date = $dt->format('Y-m-d');
-                $projects = Subsidio::where('CerPrgCod', $request->input('progid'))
+                $projects = Subsidio::where('CerProg', $request->input('progid'))
                 ->where('CerResNro','=', $request->input('resid'))
                 ->where('CerFeRe','=', $request->input('dateid'))
+                ->orderBy('CerPosCod','asc')
+                //->sortBy('CerPosCod')
                 ->paginate(15);
     
             }else {
@@ -53,6 +56,7 @@ class HomeController extends Controller
         }
 
         $name = array(
+            0 => 'N/D',
             1 => 'FONAVIS',
             2 => 'VYA RENDA',
             3 => 'CHE TAPYI',
@@ -67,7 +71,25 @@ class HomeController extends Controller
         $resid=$request->input('resid');
         $dateid=$request->input('dateid');
         $cedula=$request->input('cedula');
+        $page=$request->input('page');
 
-        return view('home',compact('projects','progid','dateid','resid','cedula','name'));
+        return view('home',compact('projects','progid','dateid','resid','cedula','name','page'));
+    }
+
+    public function previaimpresion($id, Request $request){
+
+        
+        $subsidio = Subsidio::find($id);
+        //var_dump($request->progid);
+        $progid=$request->input('progid');
+        $resid=$request->input('resid');
+        $dateid=$request->input('dateid');
+        $cedula=$request->input('cedula');
+        $page=$request->input('page');
+
+        $ciudad = Localidad::find($subsidio->CerCiuId);
+        $depto = Departamento::find($subsidio->CerDptoId);
+
+        return view('previa',compact('subsidio','progid','dateid','resid','cedula','name','page','ciudad','depto'));
     }
 }

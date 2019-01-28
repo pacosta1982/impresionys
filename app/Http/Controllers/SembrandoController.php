@@ -1,0 +1,102 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Subsidio;
+use App\Localidad;
+use App\Departamento;
+
+class SembrandoController extends Controller
+{
+    public function generateDocx($id)
+    {
+
+        $postulante = Subsidio::where('CerNro', $id)->first();
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/sembrando/template/CertificadoSHDSOIndiv_SEMBRANDO.docx'));
+        $num=" ";
+        for ($i = 0; $i<8; $i++) 
+        {
+            $num .= mt_rand(0,9);   
+        }
+        $templateProcessor->setValue('CAMPO11', $postulante->CerposNom);
+        $templateProcessor->setValue('CAMPO26', $postulante->CerNro);
+        if ($postulante->CerPosCod <= 150000 ) {
+            $templateProcessor->setValue('CAMPO12', 'C.I./CARNET Nº '.$postulante->CerPosCod);
+        } else {
+            $templateProcessor->setValue('CAMPO12', 'C.I. Nº '.$postulante->CerPosCod);
+        }
+
+        if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
+            
+            $templateProcessor->setValue('CAMPO33', '');
+            $templateProcessor->setValue('CAMPO33b', '');
+
+        } else {
+
+            if ($postulante->CerCoCI <= 150000 ) {
+                //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
+            } else {
+            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".$postulante->CerCoNo/*.', con C.I. Nº '.$postulante->CerCoCI*/);
+            $templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".$postulante->CerCoCI);
+                //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
+            }
+        }
+        //$templateProcessor->setValue('CAMPO33', $campo33);
+        $templateProcessor->setValue('CAMPO14', $postulante->CerResNro);
+        $templateProcessor->setValue('CAMPO22', $postulante->CerUsm);
+        if ($postulante->CerTipViv == '') {
+            $templateProcessor->setValue('CAMPO53', 'VR-2D');
+        } else {
+            $templateProcessor->setValue('CAMPO53', $postulante->CerTipViv);
+        }
+
+        if ($postulante->CerSupViv <= 0) {
+            $templateProcessor->setValue('CAMPO54', '43.50');
+        } else {
+            $templateProcessor->setValue('CAMPO54', $postulante->CerSupViv);
+        }
+        $ciudad = Localidad::find($postulante->CerCiuId);
+        $templateProcessor->setValue('CAMPO42', $ciudad->CiuNom);
+
+        $depto = Departamento::find($postulante->CerDptoId);
+        $templateProcessor->setValue('CAMPO43', $depto->DptoNom);
+        
+        if ($postulante->CerIndert == '') {
+            $templateProcessor->setValue('CAMPO55', '1061/15');
+        } else {
+            $templateProcessor->setValue('CAMPO55', $postulante->CerIdent);
+        }
+        
+
+        $templateProcessor->setValue('CAMPO50', $postulante->CerIdent);
+        $templateProcessor->setValue('CAMPO10', date('d/m/Y', strtotime($postulante->CerFeRe)));
+        $templateProcessor->setValue('CAMPO56', date('d/m/Y'));
+        //$templateProcessor->setValue('CAMPO12', $postulante->CerPosCod);
+        \QrCode::format('png')->size(110)->margin(0)->generate($num,storage_path("/sembrando/impresion/".$postulante->CerNro."png"));
+        $templateProcessor->setImg('macroNameImage', array(
+            'src'  => storage_path("/sembrando/impresion/".$postulante->CerNro."png")//,
+            //'size' => array( 130, 120 ) //px
+        ));
+        $templateProcessor->saveAs(storage_path("/sembrando/impresion/".$postulante->CerNro.".docx"));
+        $word = new \COM("Word.Application") or die ("Could not initialise Object.");
+        // set it to 1 to see the MS Word window (the actual opening of the document)
+        $word->Visible = 0;
+        // recommend to set to 0, disables alerts like "Do you want MS Word to be the default .. etc"
+        $word->DisplayAlerts = 0;
+        // open the word 2007-2013 document 
+        $word->Documents->Open(storage_path("/sembrando/impresion/".$postulante->CerNro.".docx"));
+        // save it as word 2003
+        //$word->ActiveDocument->SaveAs('newdocument.doc');
+        // convert word 2007-2013 to PDF
+        $word->ActiveDocument->ExportAsFixedFormat(storage_path("/sembrando/impresion/".$postulante->CerNro.".pdf"), 17, false, 0, 0, 0, 0, 7, true, true, 2, true, true, false);
+        // quit the Word process
+        $word->Quit(false);
+        // clean up
+        unset($word);
+        
+        return response()->download(storage_path("/sembrando/impresion/".$postulante->CerNro.".pdf"));
+        
+    }
+
+}

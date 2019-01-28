@@ -26,7 +26,9 @@ Auth::routes([
  Route::post('/filtros', 'HomeController@index');
  Route::get('/filtros', 'HomeController@index');
 
- Route::get('generate/{id}', 'FileController@generateDocx');
+ Route::get('generate/{id}', 'FileController@imprimir');
+
+ Route::get('previa/{id}/', 'HomeController@previaimpresion');
 
 
 //Route::get('/home/{progid}/{resid}/{dateid}/', 'HomeController@index')->name('home');

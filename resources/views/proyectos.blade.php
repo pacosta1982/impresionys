@@ -49,7 +49,7 @@
 </div>
 <div class="box box-info">
     <div class="box-header with-border">
-        <h3 class="box-title">Beneficiarios</h3>
+        <h3 class="box-title">Postulantes</h3>
         <div class="pull-right">{{ $projects->appends(request()->except('_token'))->links() }}</div>  
     </div>
     <!-- /.box-header -->
@@ -78,7 +78,7 @@
                 <td style="text-align:center;">{!! $project->CerPosCod !!}</td>
                 <td style="text-align:center;">{!! $project->CerResNro !!}</td>
                 <td style="text-align:center;">{!! date('d-m-Y', strtotime($project->CerFeRe))  !!}</td>
-                <td>{!! $name[$project->CerPrgCod] !!}</td>
+                <td>{!! $name[$project->CerProg] !!}</td>
                 <td style="text-align:center;">
                     @if ($project->CerFecSus == null)
                     <i class="fa fa-warning" style="color:darkorange"></i>
@@ -87,8 +87,9 @@
                     @endif
                 </td>
                 <td style="text-align:center;">
-                    <a href="{!! action('FileController@generateDocx', ['id'=>$project->CerNro]) !!}" > 
-                        <button class="btn btn-success" type="button"> Imprimir </button>
+                    <a href="{!! action('HomeController@previaimpresion', ['id'=>$project->CerNro, 'progid' => $progid, 'resid' => $resid
+                                                                            ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" > 
+                        <button class="btn btn-success" type="button"><i class="fa fa-print"></i> Imprimir </button>
                     </a>
                 </td>
               </tr>
@@ -106,6 +107,7 @@
                     <th style="text-align:center;">Acciones</th>
                 </tr>
             </tfoot>
+            
         </table>
       <!-- /.table-responsive -->
     </div>
@@ -114,15 +116,7 @@
   </div>
 
 @section('js')
-<script src="{{asset('js/bootstrap-datepicker.es.min.js')}}" charset="UTF-8"></script>
-<script src="{{asset('fullcalendar/lib/jquery-ui.custom.min.js')}}"></script>
-<script src="{{asset('fullcalendar/lib/moment.min.js')}}"></script>
-<script src="{{asset('fullcalendar/fullcalendar.js')}}"></script>
-<script src="{{asset('fullcalendar/lang-all.js')}}"></script>
 <script src="{{asset('js/bootstrap-datepicker.js')}}"></script>
-<script src="{{asset('js/bootstrap-datetimepicker.js')}}"></script>
-<script src="{{asset('js/locale-all.js')}}" charset="UTF-8"></script>
-<script src="{{asset('bootstrap-timepicker/js/bootstrap-timepicker.js')}}"></script>
 <script type="text/javascript">
 
     $('.date').datepicker({  
@@ -131,10 +125,6 @@
        languaje: 'es'
      });
      
-     $('.timepicker').timepicker({
-        showMeridian: false,
-        //defaultTime: false
-    })
 
 </script> 
 
