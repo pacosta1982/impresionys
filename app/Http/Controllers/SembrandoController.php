@@ -9,16 +9,41 @@ use App\Departamento;
 
 class SembrandoController extends Controller
 {
+    
+    //protected $num = "";
+    
+    public function generateCodigo(){
+        $secretkey=" ";
+        for ($i = 0; $i<8; $i++) 
+        {
+            $secretkey .= mt_rand(0,9);   
+        }
+        return $secretkey;
+    }
+    
     public function generateDocx($id)
     {
 
         $postulante = Subsidio::where('CerNro', $id)->first();
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/sembrando/template/CertificadoSHDSOIndiv_SEMBRANDO.docx'));
-        $num=" ";
-        for ($i = 0; $i<8; $i++) 
-        {
-            $num .= mt_rand(0,9);   
+        
+        //var_dump($this->generateCodigo);
+        
+
+        if ($postulante->CerPin == null) {
+            $num=$this->generateCodigo();
+            $postulante->CerPin = $num;
+            $postulante->CerFecImp = date('Y-m-d');
+            $postulante->CerFecSus = date('Y-m-d');
+            $postulante->save();
+        }else {
+            $num=$postulante->CerPin;
+            /*$postulante->CerFecImp = date('Y-m-d');
+            $postulante->CerFecSus = date('Y-m-d');
+            $postulante->save();*/
         }
+        
+
         $templateProcessor->setValue('CAMPO11', $postulante->CerposNom);
         $templateProcessor->setValue('CAMPO26', $postulante->CerNro);
         if ($postulante->CerPosCod <= 150000 ) {

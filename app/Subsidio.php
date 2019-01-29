@@ -10,6 +10,8 @@ class Subsidio extends Model
 
     protected $primaryKey = 'CerNro';
 
+    public $timestamps = false;
+
     public $incrementing = false;
     
     

@@ -80,17 +80,25 @@
                 <td style="text-align:center;">{!! date('d-m-Y', strtotime($project->CerFeRe))  !!}</td>
                 <td>{!! $name[$project->CerProg] !!}</td>
                 <td style="text-align:center;">
-                    @if ($project->CerFecSus == null)
+                    @if ($project->CerPin == null)
                     <i class="fa fa-warning" style="color:darkorange"></i>
                     @else
                     <i class="fa fa-check" style="color:forestgreen"></i>
                     @endif
                 </td>
                 <td style="text-align:center;">
+                    @if ($project->CerPin == null)
                     <a href="{!! action('HomeController@previaimpresion', ['id'=>$project->CerNro, 'progid' => $progid, 'resid' => $resid
-                                                                            ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" > 
-                        <button class="btn btn-success" type="button"><i class="fa fa-print"></i> Imprimir </button>
+                        ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" > 
+                    <button class="btn btn-success" type="button"><i class="fa fa-print"></i> Imprimir </button>
                     </a>
+                    @else
+                    <a href="{!! action('HomeController@previaimpresion', ['id'=>$project->CerNro, 'progid' => $progid, 'resid' => $resid
+                        ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" > 
+                    <button class="btn btn-danger block" type="button"><i class="fa fa-print"></i> Re Imprimir </button>
+                    </a>
+                    @endif
+                    
                 </td>
               </tr>
              @endforeach

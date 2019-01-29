@@ -31,10 +31,17 @@ class FileController extends Controller
     }
 
     public function imprimir($id){
-
-        //var_dump($id);
-        $controller =  new SembrandoController;
-        return $controller->generateDocx($id);
+        $cod= Subsidio::find($id); 
+        
+        if ($cod->CerProg == 4) {
+            $controller =  new SembrandoController;
+            return $controller->generateDocx($id);
+        }
+        if ($cod->CerProg == 1) {
+            $controller =  new SembrandoController;
+            return $controller->generateDocx($id);
+        }
+        
 
     }
     

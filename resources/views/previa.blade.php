@@ -1,7 +1,20 @@
 @extends('adminlte::page')
 
 @section('content')
+@php
+    $name = array(
+            0 => 'N/D',
+            1 => 'FONAVIS',
+            2 => 'VYA RENDA',
+            3 => 'CHE TAPYI',
+            4 => 'SEMBRANDO',
+            5 => 'EBY',
+            6 => 'COSTANERA NORTE',
+    );
 
+
+@endphp
+@role($name[$subsidio->CerProg])
 <section class="invoice">
   <!-- title row -->
   <div class="row">
@@ -38,8 +51,18 @@
         <strong>Ubicación</strong>
         <address>
           Lugar: {{$subsidio->CerIdent}}<br>
+          @if (isset($ciudad->CiuNom))
           Distrito: {{$ciudad->CiuNom}}<br>
+          @else
+          Distrito: N/A<br>  
+          @endif
+          
+          @if (isset($depto->DptoNom))
           Departamento: {{$depto->DptoNom}}<br>
+          @else
+          Departamento: N/A<br>  
+          @endif
+          
         </address>
     </div>
     <!-- /.col -->
@@ -63,5 +86,9 @@
     </div>
   </div>
 </section>
+@else
+    <h2>No posee permisos para ver este Programa</h2>
+@endrole
+
 
 @endsection
