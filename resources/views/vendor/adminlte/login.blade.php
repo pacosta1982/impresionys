@@ -33,7 +33,8 @@
             }
 
             body {
-                background-image: linear-gradient(white, #004266);
+                
+                background-color: #a1b3d1;
             }
             
             </style>

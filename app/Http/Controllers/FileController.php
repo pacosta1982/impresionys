@@ -38,7 +38,7 @@ class FileController extends Controller
             return $controller->generateDocx($id);
         }
         if ($cod->CerProg == 1) {
-            $controller =  new SembrandoController;
+            $controller =  new FonavisController;
             return $controller->generateDocx($id);
         }
         
