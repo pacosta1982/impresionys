@@ -2,6 +2,6 @@
 
 @section('content')
 
-    <h1>You are currently not connected</h1>
+    <h1>You are currently not connected ami</h1>
 
 @endsection

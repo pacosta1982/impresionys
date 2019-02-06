@@ -62,7 +62,7 @@ class SembrandoController extends Controller
             if ($postulante->CerCoCI <= 150000 ) {
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
-            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".$postulante->CerCoNo/*.', con C.I. Nº '.$postulante->CerCoCI*/);
+            $templateProcessor->setValue('CAMPO33', "y su cónyuge ".$postulante->CerCoNo/*.', con C.I. Nº '.$postulante->CerCoCI*/);
             $templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".$postulante->CerCoCI);
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
             }
