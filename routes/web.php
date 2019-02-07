@@ -26,7 +26,7 @@ Auth::routes([
  Route::post('/filtros', 'HomeController@index');
  Route::get('/filtros', 'HomeController@index');
 
- Route::get('generate/{id}', 'FileController@imprimir');
+ Route::get('generate/{id}/{idtipo}', 'FileController@imprimir');
 
  Route::get('previa/{id}/', 'HomeController@previaimpresion');
 

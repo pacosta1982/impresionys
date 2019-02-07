@@ -21,7 +21,7 @@ class SembrandoController extends Controller
         return $secretkey;
     }
     
-    public function generateDocx($id)
+    public function generateDocx($id,$tipo)
     {
 
         $postulante = Subsidio::where('CerNro', $id)->first();

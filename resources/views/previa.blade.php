@@ -71,10 +71,14 @@
   <!-- this row will not appear when printing -->
   <div class="row no-print">
     <div class="col-xs-12">
-        
-        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro]) !!}" > 
-            <button type="button" class="btn btn-success pull-right" style="margin-right: 5px;">
-                <i class="fa fa-download"></i> Generar PDF
+        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'2']) !!}" > 
+          <button type="button" class="btn btn-info pull-right" id="recibo" style="margin-right: 5px;">
+              <i class="fa fa-download"></i> Imprimir Recibo
+            </button>
+      </a>
+        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'1']) !!}" > 
+            <button type="button" id="show" class="btn btn-success pull-right" style="margin-right: 5px;">
+                <i class="fa fa-download"></i> Imprimir Certificado
               </button>
         </a>
         <a href="{!! action('HomeController@index', ['progid' => $progid, 'resid' => $resid
@@ -91,4 +95,23 @@
 @endrole
 
 
+@endsection
+
+@section('js')
+<script>
+  $(document).ready(function(){
+    $("#show").click(function(){
+      setTimeout(
+            function() {
+              $("#recibo").show();
+            }, 3000);
+              
+            });
+  });
+
+  if ({{json_encode($subsidio->CerPin)}} == null) {
+    $("#recibo").hide();
+  }
+
+  </script>
 @endsection

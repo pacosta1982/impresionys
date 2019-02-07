@@ -19,8 +19,12 @@ class FonavisController extends Controller
         }
         return $secretkey;
     }
+
+    public function cargaVariable(){
+
+    }
     
-    public function generateDocx($id)
+    public function generateDocx($id,$tipo)
     {
 
         $postulante = Subsidio::where('CerNro', $id)->first();
@@ -35,8 +39,14 @@ class FonavisController extends Controller
 
         switch ($postulante->CerMod) {
             case "CH":
-            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chtemplate.docx'));
-                break;
+            if ($tipo == 1) {
+                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chtemplate.docx'));
+            } else {
+                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chrecibo.docx'));
+            }
+            
+            
+            break;
             case "blue":
                 echo "Your favorite color is blue!";
                 break;

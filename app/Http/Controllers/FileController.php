@@ -30,16 +30,16 @@ class FileController extends Controller
         return view('home');
     }
 
-    public function imprimir($id){
+    public function imprimir($id,$tipo){
         $cod= Subsidio::find($id); 
         
         if ($cod->CerProg == 4) {
             $controller =  new SembrandoController;
-            return $controller->generateDocx($id);
+            return $controller->generateDocx($id,$tipo);
         }
         if ($cod->CerProg == 1) {
             $controller =  new FonavisController;
-            return $controller->generateDocx($id);
+            return $controller->generateDocx($id,$tipo);
         }
         
 
