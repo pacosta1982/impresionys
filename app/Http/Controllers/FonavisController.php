@@ -182,7 +182,7 @@ class FonavisController extends Controller
         $templateProcessor->setValue('CAMPO56', date('d/m/Y'));
         //$templateProcessor->setValue('CAMPO12', $postulante->CerPosCod);
         \QrCode::format('png')->size(110)->margin(0)->generate($num,storage_path("/fonavis/impresion/".$CerNro."png"));
-        $templateProcessor->setImg('macroNameImage', array(
+        $templateProcessor->setImg('IMAGEN', array(
             'src'  => storage_path("/fonavis/impresion/".$CerNro."png")//,
             //'size' => array( 130, 120 ) //px
         ));
