@@ -29,8 +29,10 @@ class FonavisController extends Controller
 
         $postulante = Subsidio::where('CerNro', $id)->first();
 
-        $CerNro = $postulante->CerNro;
+        $CerNro = $postulante->CerPosCod;
         $CerNro = substr($CerNro, 0, strpos($CerNro, ' '));
+
+        $nombre = \Auth::user()->username;
         /*if ($postulante->CerMod == 'CH') {
             $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chtemplate.docx'));
         }
@@ -45,10 +47,13 @@ class FonavisController extends Controller
                 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chrecibo.docx'));
             }
             
-            
             break;
-            case "blue":
-                echo "Your favorite color is blue!";
+            case "TI":
+            if ($tipo == 1) {
+                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/titemplate.docx'));
+            } else {
+                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/tirecibo.docx'));
+            }
                 break;
             case "green":
                 echo "Your favorite color is green!";
@@ -58,11 +63,12 @@ class FonavisController extends Controller
                 return "No existe platilla";
         }
 
-        if ($postulante->CerPin == null) {
+        if ($postulante->CerPin == null || $postulante->CerPin == 0) {
             $num=$this->generateCodigo();
             $postulante->CerPin = $num;
-            $postulante->CerFecImp = date('Y-m-d');
-            $postulante->CerFecSus = date('Y-m-d');
+            $postulante->CerFecImp = date('Y-m-d H:i:s.v');
+            $postulante->CerFecSus = date('Y-m-d H:i:s.v');
+            $postulante->CerUsuImp = $nombre;
             $postulante->save();
         }else {
             $num=$postulante->CerPin;
@@ -108,7 +114,7 @@ class FonavisController extends Controller
         }
         $templateProcessor->setValue('CAMPO32', date('d/m/Y', strtotime($postulante->CerVig)));
         $templateProcessor->setValue('CAMPO20', $postulante->CerNivCod);
-        $templateProcessor->setValue('CAMPO21', $postulante->CerMonUSM);
+        $templateProcessor->setValue('CAMPO21', number_format($postulante->CerMonUSM,2,'.','.'));
         setlocale(LC_ALL,"es_ES");
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $templateProcessor->setValue('CAMPO27', 'Asunción, '.date('d', strtotime($postulante->CerFeRe)).' de '.$meses[date('m', strtotime($postulante->CerFeRe))-1].
@@ -152,7 +158,7 @@ class FonavisController extends Controller
         }
         //$templateProcessor->setValue('CAMPO33', $campo33);
         $templateProcessor->setValue('CAMPO14', $postulante->CerResNro);
-        $templateProcessor->setValue('CAMPO22', $postulante->CerUsm);
+        $templateProcessor->setValue('CAMPO22', number_format($postulante->CerUsm,2,'.','.'));
         if ($postulante->CerTipViv == '') {
             $templateProcessor->setValue('CAMPO53', 'VR-2D');
         } else {

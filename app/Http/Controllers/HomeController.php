@@ -36,16 +36,17 @@ class HomeController extends Controller
 
         if ($request->input('cedula')) {
             $projects= Subsidio::where('CerPosCod', $request->input('cedula'))->paginate(15);
+
         } else {
             //var_dump('sin cedula');
             if ($request->has(['progid', 'resid','dateid'])) {
             
                 $s = $request->input('dateid');
                 $dt = new \DateTime($s);
-                $date = $dt->format('Y-m-d');
+                $date = $dt->format('Y-d-m H:i:s.v');
                 $projects = Subsidio::where('CerProg', $request->input('progid'))
                 ->where('CerResNro','=', $request->input('resid'))
-                ->where('CerFeRe','=', $request->input('dateid'))
+                ->where('CerFeRe','=', $date)
                 ->orderBy('CerPosCod','asc')
                 //->sortBy('CerPosCod')
                 ->paginate(15);
@@ -90,6 +91,6 @@ class HomeController extends Controller
         $ciudad = Localidad::find($subsidio->CerCiuId);
         $depto = Departamento::find($subsidio->CerDptoId);
 
-        return view('previa',compact('subsidio','progid','dateid','resid','cedula','name','page','ciudad','depto'));
+        return view('previa',compact('subsidio','progid','dateid','resid','cedula','page','ciudad','depto'));
     }
 }

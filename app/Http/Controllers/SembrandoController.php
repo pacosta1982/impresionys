@@ -28,13 +28,14 @@ class SembrandoController extends Controller
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/sembrando/template/CertificadoSHDSOIndiv_SEMBRANDO.docx'));
         
         //var_dump($this->generateCodigo);
-        
+        $nombre = \Auth::user()->username;
 
-        if ($postulante->CerPin == null) {
+        if ($postulante->CerPin == null || $postulante->CerPin == 0) {
             $num=$this->generateCodigo();
             $postulante->CerPin = $num;
-            $postulante->CerFecImp = date('Y-m-d');
-            $postulante->CerFecSus = date('Y-m-d');
+            $postulante->CerFecImp = date('Y-m-d H:i:s.v');
+            $postulante->CerFecSus = date('Y-m-d H:i:s.v');
+            $postulante->CerUsuImp = $nombre;
             $postulante->save();
         }else {
             $num=$postulante->CerPin;

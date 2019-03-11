@@ -12,6 +12,10 @@ class Subsidio extends Model
 
     public $timestamps = false;
 
+    protected $connection = 'sqlsrv';
+
+    protected $dateFormat = 'Y-m-d H:i:s.v';
+
     public $incrementing = false;
     
     
