@@ -66,9 +66,9 @@ class FonavisController extends Controller
         if ($postulante->CerPin == null || $postulante->CerPin == 0) {
             $num=$this->generateCodigo();
             $postulante->CerPin = $num;
-            $postulante->CerFecImp = date('Y-m-d H:i:s.v');
-            $postulante->CerFecSus = date('Y-m-d H:i:s.v');
-            $postulante->CerUsuImp = $nombre;
+            //$postulante->CerFecImp = date('Y-m-d H:i:s.v');
+            //$postulante->CerFecSus = date('Y-m-d H:i:s.v');
+            $postulante->CerUsuImp = substr($nombre, 0, 9);
             $postulante->save();
         }else {
             $num=$postulante->CerPin;
@@ -130,15 +130,16 @@ class FonavisController extends Controller
             $templateProcessor->setValue('CAMPO35', '');
         }
         $templateProcessor->setValue('CAMPO17', $postulante->CerLla.'/'.$postulante->CerAno);
-        $templateProcessor->setValue('CAMPO18', $postulante->CerLla);
+        $templateProcessor->setValue('CAMPO18', $postulante->CerReLla);
         $templateProcessor->setValue('CAMPO30', date('d/m/Y', strtotime($postulante->CerReLFe)));
 
         $templateProcessor->setValue('CAMPO25', $postulante->CerNucNom);
         $templateProcessor->setValue('CAMPO26', $CerNro);
+        $cedula = number_format((int)$postulante->CerPosCod,0,'.','.');
         if ($postulante->CerPosCod <= 150000 ) {
-            $templateProcessor->setValue('CAMPO12', 'C.I./CARNET Nº '.$postulante->CerPosCod);
+            $templateProcessor->setValue('CAMPO12', 'C.I./CARNET Nº '.$cedula);
         } else {
-            $templateProcessor->setValue('CAMPO12', 'C.I. Nº '.$postulante->CerPosCod);
+            $templateProcessor->setValue('CAMPO12', 'C.I. Nº '.$cedula);
         }
 
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
@@ -152,7 +153,7 @@ class FonavisController extends Controller
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
             $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".$postulante->CerCoNo/*.', con C.I. Nº '.$postulante->CerCoCI*/);
-            $templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".$postulante->CerCoCI);
+            $templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
             }
         }
@@ -179,7 +180,7 @@ class FonavisController extends Controller
         if ($postulante->CerIndert == '') {
             $templateProcessor->setValue('CAMPO55', '1061/15');
         } else {
-            $templateProcessor->setValue('CAMPO55', $postulante->CerIdent);
+            $templateProcessor->setValue('CAMPO55', $postulante->CerIndert);
         }
         
 

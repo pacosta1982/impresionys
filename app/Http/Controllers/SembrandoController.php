@@ -33,9 +33,9 @@ class SembrandoController extends Controller
         if ($postulante->CerPin == null || $postulante->CerPin == 0) {
             $num=$this->generateCodigo();
             $postulante->CerPin = $num;
-            $postulante->CerFecImp = date('Y-m-d H:i:s.v');
-            $postulante->CerFecSus = date('Y-m-d H:i:s.v');
-            $postulante->CerUsuImp = $nombre;
+            //$postulante->CerFecImp = date('Y-m-d H:i:s.v');
+            //$postulante->CerFecSus = date('Y-m-d H:i:s.v');
+            $postulante->CerUsuImp = substr($nombre, 0, 9);
             $postulante->save();
         }else {
             $num=$postulante->CerPin;
@@ -70,7 +70,7 @@ class SembrandoController extends Controller
         }
         //$templateProcessor->setValue('CAMPO33', $campo33);
         $templateProcessor->setValue('CAMPO14', $postulante->CerResNro);
-        $templateProcessor->setValue('CAMPO22', $postulante->CerUsm);
+        $templateProcessor->setValue('CAMPO22', number_format($postulante->CerUsm,2,'.','.'));
         if ($postulante->CerTipViv == '') {
             $templateProcessor->setValue('CAMPO53', 'VR-2D');
         } else {
@@ -80,7 +80,7 @@ class SembrandoController extends Controller
         if ($postulante->CerSupViv <= 0) {
             $templateProcessor->setValue('CAMPO54', '43.50');
         } else {
-            $templateProcessor->setValue('CAMPO54', $postulante->CerSupViv);
+            $templateProcessor->setValue('CAMPO54', number_format($postulante->CerSupViv,2,'.','.'));
         }
         $ciudad = Localidad::find($postulante->CerCiuId);
         $templateProcessor->setValue('CAMPO42', $ciudad->CiuNom);
@@ -91,7 +91,7 @@ class SembrandoController extends Controller
         if ($postulante->CerIndert == '') {
             $templateProcessor->setValue('CAMPO55', '1061/15');
         } else {
-            $templateProcessor->setValue('CAMPO55', $postulante->CerIdent);
+            $templateProcessor->setValue('CAMPO55', $postulante->CerIndert);
         }
         
 
