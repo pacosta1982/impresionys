@@ -129,7 +129,7 @@ class FonavisController extends Controller
         } else {
             $templateProcessor->setValue('CAMPO35', '');
         }
-        $templateProcessor->setValue('CAMPO17', $postulante->CerLla.'/'.$postulante->CerAno);
+        $templateProcessor->setValue('CAMPO17', '0'.$postulante->CerLla.'/'.$postulante->CerAno);
         $templateProcessor->setValue('CAMPO18', $postulante->CerReLla);
         $templateProcessor->setValue('CAMPO30', date('d/m/Y', strtotime($postulante->CerReLFe)));
 
