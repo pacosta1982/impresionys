@@ -7,6 +7,7 @@ use App\Subsidio;
 use App\Localidad;
 use App\Departamento;
 use App\Grupo;
+use App\Persona;
 
 class FonavisController extends Controller
 {
@@ -28,7 +29,7 @@ class FonavisController extends Controller
     {
 
         $postulante = Subsidio::where('CerNro', $id)->first();
-
+        $sat = Persona::where('PerCod', $postulante->CerNucCod)->first();
         $CerNro = $postulante->CerPosCod;
         $CerNro = substr($CerNro, 0, strpos($CerNro, ' '));
 
@@ -133,7 +134,7 @@ class FonavisController extends Controller
         $templateProcessor->setValue('CAMPO18', $postulante->CerReLla);
         $templateProcessor->setValue('CAMPO30', date('d/m/Y', strtotime($postulante->CerReLFe)));
 
-        $templateProcessor->setValue('CAMPO25', $postulante->CerNucNom);
+        $templateProcessor->setValue('CAMPO25', $sat->PerNom);
         $templateProcessor->setValue('CAMPO26', $CerNro);
         $cedula = number_format((int)$postulante->CerPosCod,0,'.','.');
         if ($postulante->CerPosCod <= 150000 ) {
