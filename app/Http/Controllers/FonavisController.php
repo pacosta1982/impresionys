@@ -152,8 +152,8 @@ class FonavisController extends Controller
             if ($postulante->CerCoCI <= 150000 ) {
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
-            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".$postulante->CerCoNo/*.', con C.I. Nº '.$postulante->CerCoCI*/);
-            $templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
+            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".$postulante->CerCoNo.', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.'));
+            //$templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
             }
         }
