@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Subsidio;
 use App\Localidad;
 use App\Departamento;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -47,7 +48,7 @@ class HomeController extends Controller
                 $projects = Subsidio::where('CerProg', $request->input('progid'))
                 ->where('CerResNro','=', $request->input('resid'))
                 ->where('CerFeRe','=', $date)
-                ->orderBy('CerPosCod','asc')
+                ->orderBy(DB::raw('SUBSTRING(CerNro, 4,  15)'),'asc')
                 //->sortBy('CerPosCod')
                 ->paginate(15);
     
