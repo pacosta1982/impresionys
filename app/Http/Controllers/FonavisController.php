@@ -76,7 +76,7 @@ class FonavisController extends Controller
         }
         
 
-        $templateProcessor->setValue('CAMPO11', $postulante->CerposNom);
+        $templateProcessor->setValue('CAMPO11', rtrim($postulante->CerposNom));
 
         $report = Grupo::where('NucCod', '=', $postulante->CerNucCod)
                 ->where('GnuCod', '=', $postulante->CerGnuCod)
@@ -146,14 +146,14 @@ class FonavisController extends Controller
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
             
             $templateProcessor->setValue('CAMPO33', '');
-            $templateProcessor->setValue('CAMPO33b', '');
+            
 
         } else {
 
             if ($postulante->CerCoCI <= 150000 ) {
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
-            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".$postulante->CerCoNo.', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.'));
+            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".rtrim($postulante->CerCoNo).', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.'));
             //$templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
             }
