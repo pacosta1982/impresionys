@@ -30,6 +30,7 @@ class FonavisController extends Controller
 
         $postulante = Subsidio::where('CerNro', $id)->first();
         $sat = Persona::where('PerCod', $postulante->CerNucCod)->first();
+        $titular = Persona::where('PerCod', $postulante->CerPosCod)->first();
         $CerNro = $postulante->CerPosCod;
         $CerNro = substr($CerNro, 0, strpos($CerNro, ' '));
 
@@ -76,7 +77,13 @@ class FonavisController extends Controller
         }
         
 
-        $templateProcessor->setValue('CAMPO11', rtrim($postulante->CerposNom));
+        
+
+        if ($titular->PerSexo == 'M') {
+            $templateProcessor->setValue('CAMPO11', ' el Señor '.rtrim($postulante->CerposNom));
+        } else {
+            $templateProcessor->setValue('CAMPO11', ' la Señora '.rtrim($postulante->CerposNom));
+        }
 
         $report = Grupo::where('NucCod', '=', $postulante->CerNucCod)
                 ->where('GnuCod', '=', $postulante->CerGnuCod)
@@ -115,7 +122,7 @@ class FonavisController extends Controller
         }
         $templateProcessor->setValue('CAMPO32', date('d/m/Y', strtotime($postulante->CerVig)));
         $templateProcessor->setValue('CAMPO20', $postulante->CerNivCod);
-        $templateProcessor->setValue('CAMPO21', number_format($postulante->CerMonUSM,2,'.','.'));
+        $templateProcessor->setValue('CAMPO21', number_format($postulante->CerMonUSM,2,',','.'));
         setlocale(LC_ALL,"es_ES");
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $templateProcessor->setValue('CAMPO27', 'Asunción, '.date('d', strtotime($postulante->CerFeRe)).' de '.$meses[date('m', strtotime($postulante->CerFeRe))-1].
@@ -130,7 +137,7 @@ class FonavisController extends Controller
         } else {
             $templateProcessor->setValue('CAMPO35', '');
         }
-        $templateProcessor->setValue('CAMPO17', '0'.$postulante->CerLla.'/'.$postulante->CerAno);
+        $templateProcessor->setValue('CAMPO17', '0'.rtrim($postulante->CerLla).'/'.rtrim($postulante->CerAno));
         $templateProcessor->setValue('CAMPO18', $postulante->CerReLla);
         $templateProcessor->setValue('CAMPO30', date('d/m/Y', strtotime($postulante->CerReLFe)));
 
@@ -145,7 +152,13 @@ class FonavisController extends Controller
 
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
             
-            $templateProcessor->setValue('CAMPO33', '');
+            if ($titular->PerSexo == 'M') {
+                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado');
+            } else {
+                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiada');
+            }
+            
+            
             
 
         } else {
@@ -153,14 +166,14 @@ class FonavisController extends Controller
             if ($postulante->CerCoCI <= 150000 ) {
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
-            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".rtrim($postulante->CerCoNo).', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.'));
+            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".rtrim($postulante->CerCoNo).', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.').', han sido beneficiados');
             //$templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
             }
         }
         //$templateProcessor->setValue('CAMPO33', $campo33);
         $templateProcessor->setValue('CAMPO14', $postulante->CerResNro);
-        $templateProcessor->setValue('CAMPO22', number_format($postulante->CerUsm,2,'.','.'));
+        $templateProcessor->setValue('CAMPO22', number_format($postulante->CerUsm,2,',','.'));
         if ($postulante->CerTipViv == '') {
             $templateProcessor->setValue('CAMPO53', 'VR-2D');
         } else {
