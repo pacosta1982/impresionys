@@ -141,7 +141,7 @@ class FonavisController extends Controller
         $templateProcessor->setValue('CAMPO18', $postulante->CerReLla);
         $templateProcessor->setValue('CAMPO30', date('d/m/Y', strtotime($postulante->CerReLFe)));
 
-        $templateProcessor->setValue('CAMPO25', $sat->PerNom);
+        $templateProcessor->setValue('CAMPO25', $postulante->CerNucNom);
         $templateProcessor->setValue('CAMPO26', $CerNro);
         $cedula = number_format((int)$postulante->CerPosCod,0,'.','.');
         if ($postulante->CerPosCod <= 150000 ) {
