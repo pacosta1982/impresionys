@@ -10,6 +10,8 @@ class Grupo extends Model
 
     protected $primaryKey = ['NucCod', 'GnuCod'];
 
+    protected $connection = 'sqlsrv';
+
     public $incrementing = false;
     
     
