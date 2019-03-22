@@ -15,6 +15,7 @@
                     <option value="5" {{ old('progid',isset($progid)?$progid:'') == '5' ? "selected":""}}>EBY</option>
                 </select>
             </div>
+            <h4><strong>Total: {{ $projects->total() }}</strong></h4>
         </div>
         <div class="col-md-3">
             <div class="form-group">
@@ -43,11 +44,23 @@
             
         </form>
     </div>
+    
 </div>
 </div>
 <div class="box box-info">
     <div class="box-header with-border">
-        <h3 class="box-title">Postulantes Total: {{ $projects->total() }}</h3>
+            @role('FONAVIS')
+            <a href="{!! action('FonavisController@generateMasivo', ['progid' => $progid, 'resid' => $resid
+                    ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page,'idtipo'=>'1']) !!}" > 
+            <button class="btn btn-success" type="button"><i class="fa fa-print"></i> Generar Certificado </button>
+            </a>
+                <a href="{!! action('FonavisController@generateMasivo', ['progid' => $progid, 'resid' => $resid
+                        ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page,'idtipo'=>'2']) !!}" > 
+                <button class="btn btn-info" type="button"><i class="fa fa-print"></i> Generar Recibo </button>
+                </a>
+            @else
+                
+            @endrole
         <div class="pull-right">{{ $projects->appends(request()->except('_token'))->links() }}</div>  
     </div>
     <!-- /.box-header -->

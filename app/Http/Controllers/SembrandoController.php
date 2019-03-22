@@ -35,10 +35,12 @@ class SembrandoController extends Controller
             $postulante->CerPin = $num;
             //$postulante->CerFecImp = date('Y-m-d H:i:s.v');
             //$postulante->CerFecSus = date('Y-m-d H:i:s.v');
-            $postulante->CerUsuImp = substr($nombre, 0, 9);
+            $postulante->CerUsuImp = substr($nombre, 0, 10);
             $postulante->save();
         }else {
             $num=$postulante->CerPin;
+            $postulante->CerUsuImp = substr($nombre, 0, 10);
+            $postulante->save();
             /*$postulante->CerFecImp = date('Y-m-d');
             $postulante->CerFecSus = date('Y-m-d');
             $postulante->save();*/

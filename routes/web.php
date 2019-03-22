@@ -35,5 +35,7 @@ Auth::routes([
 
  Route::get('previa/{id}/', 'HomeController@previaimpresion');
 
+ Route::get('generatemasivo/', 'FonavisController@generateMasivo');
+
 
 //Route::get('/home/{progid}/{resid}/{dateid}/', 'HomeController@index')->name('home');
