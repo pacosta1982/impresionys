@@ -73,7 +73,17 @@ class FonavisController extends Controller
         }
 
         if ($postulante->CerPin == null || $postulante->CerPin == 0) {
+
+            //$check = Subsidio::where('CerPin', $id)->first(); 
+
             $num=$this->generateCodigo();
+            $check = Subsidio::where('CerPin', $num)->first();
+            
+            for ($i=0; isset($check->CerPin); $i++) { 
+                $num=$this->generateCodigo();
+                $check = Subsidio::where('CerPin', $num)->first();
+            }
+
             $postulante->CerPin = $num;
             $postulante->CerUsuImp = substr($nombre, 0, 10);
             $postulante->save();
