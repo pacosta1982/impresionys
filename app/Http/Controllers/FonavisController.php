@@ -237,8 +237,14 @@ class FonavisController extends Controller
         $word->Quit(false);
         // clean up
         unset($word);
+
+        if ($tipo == 99) {
+            return response()->download(storage_path("/fonavis/impresion/".$CerNro.".docx"));
+        }else{
+            return response()->download(storage_path("/fonavis/impresion/".$ext.substr(rtrim($postulante->CerNro), 5).'_'.$CerNro.".pdf"));
+        }
         
-        return response()->download(storage_path("/fonavis/impresion/".$ext.substr(rtrim($postulante->CerNro), 5).'_'.$CerNro.".pdf"));
+        
         
     }
 

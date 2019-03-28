@@ -71,11 +71,18 @@
   <!-- this row will not appear when printing -->
   <div class="row no-print">
     <div class="col-xs-12">
+        @role('admin')
+        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'99']) !!}" > 
+            <button type="button" class="btn btn-danger pull-right" id="recibo" style="margin-right: 5px;">
+                <i class="fa  fa-file-word-o"></i> Word
+              </button>
+          </a>
+          @endrole
         <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'2']) !!}" > 
           <button type="button" class="btn btn-info pull-right" id="recibo" style="margin-right: 5px;">
               <i class="fa fa-download"></i> Imprimir Recibo
             </button>
-      </a>
+        </a>
         <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'1']) !!}" > 
             <button type="button" id="show" class="btn btn-success pull-right" style="margin-right: 5px;">
                 <i class="fa fa-download"></i> Imprimir Certificado
