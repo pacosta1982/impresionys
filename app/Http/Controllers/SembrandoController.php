@@ -31,7 +31,16 @@ class SembrandoController extends Controller
         $nombre = \Auth::user()->username;
 
         if ($postulante->CerPin == null || $postulante->CerPin == 0) {
+
             $num=$this->generateCodigo();
+            $check = Subsidio::where('CerPin', $num)->first();
+            
+            for ($i=0; $check == $num; $i++) { 
+                $num=$this->generateCodigo();
+                $check = Subsidio::where('CerPin', $num)->first();
+            }
+
+            //$num=$this->generateCodigo();
             $postulante->CerPin = $num;
             //$postulante->CerFecImp = date('Y-m-d H:i:s.v');
             //$postulante->CerFecSus = date('Y-m-d H:i:s.v');

@@ -50,22 +50,26 @@ class FonavisController extends Controller
 
         switch ($postulante->CerMod) {
             case "CH":
-            if ($tipo == 1) {
-                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chtemplate.docx'));
-            } else {
-                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chrecibo.docx'));
-            }
+                if ($tipo == 1) {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chtemplate.docx'));
+                } else {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chrecibo.docx'));
+                }
             
             break;
             case "TI":
-            if ($tipo == 1) {
-                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/titemplate.docx'));
-            } else {
-                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/tirecibo.docx'));
-            }
+                if ($tipo == 1) {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/titemplate.docx'));
+                } else {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/tirecibo.docx'));
+                }
                 break;
-            case "green":
-                echo "Your favorite color is green!";
+            case "CV":
+                if ($tipo == 1) {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/cvtemplate.docx'));
+                } else {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/cvrecibo.docx'));
+                }
                 break;
             default:
                 //echo "Your favorite color is neither red, blue, nor green!";
