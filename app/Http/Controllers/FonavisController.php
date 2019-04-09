@@ -103,10 +103,16 @@ class FonavisController extends Controller
             $templateProcessor->setValue('CAMPO11', ' la Señora '.rtrim($postulante->CerposNom));
         }
 
-        $report = Grupo::where('NucCod', '=', $postulante->CerNucCod)
-                ->where('GnuCod', '=', $postulante->CerGnuCod)
-                ->first();
-        $templateProcessor->setValue('CAMPO23', $report->GnuNom);
+        if($postulante->CerMod == "CV"){
+            
+        }else{
+            $report = Grupo::where('NucCod', '=', $postulante->CerNucCod)
+            ->where('GnuCod', '=', $postulante->CerGnuCod)
+            ->first();
+            $templateProcessor->setValue('CAMPO23', $report->GnuNom);
+        }
+        
+
 
         if ($postulante->CerNucNom == 0) {
             $templateProcessor->setValue('CAMPO73', '');
