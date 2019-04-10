@@ -58,10 +58,11 @@ class SembrandoController extends Controller
 
         $templateProcessor->setValue('CAMPO11', $postulante->CerposNom);
         $templateProcessor->setValue('CAMPO26', $postulante->CerNro);
+        $cedula = number_format((int)$postulante->CerPosCod,0,'.','.');
         if ($postulante->CerPosCod <= 150000 ) {
-            $templateProcessor->setValue('CAMPO12', 'C.I./CARNET Nº '.$postulante->CerPosCod);
+            $templateProcessor->setValue('CAMPO12', 'C.I./CARNET Nº '.$cedula);
         } else {
-            $templateProcessor->setValue('CAMPO12', 'C.I. Nº '.$postulante->CerPosCod);
+            $templateProcessor->setValue('CAMPO12', 'C.I. Nº '.$cedula);
         }
 
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
@@ -74,14 +75,15 @@ class SembrandoController extends Controller
             if ($postulante->CerCoCI <= 150000 ) {
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
-            $templateProcessor->setValue('CAMPO33', "y su cónyuge ".$postulante->CerCoNo/*.', con C.I. Nº '.$postulante->CerCoCI*/);
-            $templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".$postulante->CerCoCI);
+            $cedulaconyuge = number_format((int)$postulante->CerCoCI,0,'.','.');
+            $templateProcessor->setValue('CAMPO33', "y su cónyuge ".rtrim($postulante->CerCoNo).", con C.I. Nº ".$cedulaconyuge/*.', con C.I. Nº '.$postulante->CerCoCI*/);
+            $templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".$cedulaconyuge);
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
             }
         }
         //$templateProcessor->setValue('CAMPO33', $campo33);
         $templateProcessor->setValue('CAMPO14', $postulante->CerResNro);
-        $templateProcessor->setValue('CAMPO22', number_format($postulante->CerUsm,2,'.','.'));
+        $templateProcessor->setValue('CAMPO22', number_format($postulante->CerUsm,2,',','.'));
         if ($postulante->CerTipViv == '') {
             $templateProcessor->setValue('CAMPO53', 'VR-2D');
         } else {
@@ -91,7 +93,7 @@ class SembrandoController extends Controller
         if ($postulante->CerSupViv <= 0) {
             $templateProcessor->setValue('CAMPO54', '43.50');
         } else {
-            $templateProcessor->setValue('CAMPO54', number_format($postulante->CerSupViv,2,'.','.'));
+            $templateProcessor->setValue('CAMPO54', number_format($postulante->CerSupViv,2,',','.'));
         }
         $ciudad = Localidad::find($postulante->CerCiuId);
         $templateProcessor->setValue('CAMPO42', $ciudad->CiuNom);
