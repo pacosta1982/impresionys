@@ -399,7 +399,7 @@ class FonavisController extends Controller
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $templateProcessor->setValue('CAMPO27', 'Asunción, '.date('d', strtotime($postulante->CerFeRe)).' de '.$meses[date('m', strtotime($postulante->CerFeRe))-1].
         ' de '.date('Y', strtotime($postulante->CerFeRe)));
-        if (empty($postulante->CerObsSub)) {
+        if (isset($postulante->CerObsSub)) {
             $templateProcessor->setValue('CAMPO57', '');
         } else {
             $templateProcessor->setValue('CAMPO57', 'Observación: '.$postulante->CerObsSub);
