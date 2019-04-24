@@ -13,12 +13,12 @@ use ZipArchive;
 
 class FonavisController extends Controller
 {
-    
+
     public function generateCodigo(){
         $secretkey=" ";
-        for ($i = 0; $i<8; $i++) 
+        for ($i = 0; $i<8; $i++)
         {
-            $secretkey .= mt_rand(0,9);   
+            $secretkey .= mt_rand(0,9);
         }
         return $secretkey;
     }
@@ -26,7 +26,7 @@ class FonavisController extends Controller
     public function cargaVariable(){
 
     }
-    
+
     public function generateDocx($id,$tipo)
     {
 
@@ -37,11 +37,7 @@ class FonavisController extends Controller
         $CerNro = substr($CerNro, 0, strpos($CerNro, ' '));
 
         $nombre = \Auth::user()->username;
-        /*if ($postulante->CerMod == 'CH') {
-            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chtemplate.docx'));
-        }
 
-        $favcolor = "red";*/
         if ($tipo == 1) {
             $ext="CS";
         }else{
@@ -55,7 +51,7 @@ class FonavisController extends Controller
                 } else {
                     $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chrecibo.docx'));
                 }
-            
+
             break;
             case "TI":
                 if ($tipo == 1) {
@@ -78,12 +74,12 @@ class FonavisController extends Controller
 
         if ($postulante->CerPin == null || $postulante->CerPin == 0) {
 
-            //$check = Subsidio::where('CerPin', $id)->first(); 
+            //$check = Subsidio::where('CerPin', $id)->first();
 
             $num=$this->generateCodigo();
             $check = Subsidio::where('CerPin', $num)->first();
-            
-            for ($i=0; isset($check->CerPin); $i++) { 
+
+            for ($i=0; isset($check->CerPin); $i++) {
                 $num=$this->generateCodigo();
                 $check = Subsidio::where('CerPin', $num)->first();
             }
@@ -96,7 +92,7 @@ class FonavisController extends Controller
             $postulante->CerUsuImp = substr($nombre, 0, 10);
             $postulante->save();
         }
-        
+
         if ($titular->PerSexo == 'M') {
             $templateProcessor->setValue('CAMPO11', ' el Señor '.rtrim($postulante->CerposNom));
         } else {
@@ -104,15 +100,13 @@ class FonavisController extends Controller
         }
 
         if($postulante->CerMod == "CV"){
-            
+
         }else{
             $report = Grupo::where('NucCod', '=', $postulante->CerNucCod)
             ->where('GnuCod', '=', $postulante->CerGnuCod)
             ->first();
             $templateProcessor->setValue('CAMPO23', $report->GnuNom);
         }
-        
-
 
         if ($postulante->CerNucNom == 0) {
             $templateProcessor->setValue('CAMPO73', '');
@@ -129,8 +123,8 @@ class FonavisController extends Controller
                     $postulante->CerRect2Nr.' de fecha '.date('d/m/Y', strtotime($postulante->CerRect2Fe)));
                     $templateProcessor->setValue('CAMPO74', '');
                 }
-                
-            }  
+
+            }
         }
 
         switch ($postulante->CerPlzOrig) {
@@ -175,15 +169,15 @@ class FonavisController extends Controller
         }
 
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
-            
+
             if ($titular->PerSexo == 'M') {
                 $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado');
             } else {
                 $templateProcessor->setValue('CAMPO33', ' ha sido beneficiada');
             }
-            
-            
-            
+
+
+
 
         } else {
 
@@ -192,7 +186,7 @@ class FonavisController extends Controller
             } else {
             $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".rtrim($postulante->CerCoNo).', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.').', han sido beneficiados');
             //$templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
-                //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
+                //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true);
             }
         }
         //$templateProcessor->setValue('CAMPO33', $campo33);
@@ -210,17 +204,27 @@ class FonavisController extends Controller
             $templateProcessor->setValue('CAMPO54', $postulante->CerSupViv);
         }
         $ciudad = Localidad::find($postulante->CerCiuId);
-        $templateProcessor->setValue('CAMPO42', $ciudad->CiuNom);
+        if ($postulante->CerCiuId == 0) {
+
+        } else {
+            $templateProcessor->setValue('CAMPO42', $ciudad->CiuNom);
+        }
 
         $depto = Departamento::find($postulante->CerDptoId);
-        $templateProcessor->setValue('CAMPO43', $depto->DptoNom);
-        
+        if ($postulante->CerDptoId == 0) {
+
+        } else {
+            $templateProcessor->setValue('CAMPO43', $depto->DptoNom);
+        }
+
+
+
         if ($postulante->CerIndert == '') {
             $templateProcessor->setValue('CAMPO55', '1061/15');
         } else {
             $templateProcessor->setValue('CAMPO55', $postulante->CerIndert);
         }
-        
+
 
         $templateProcessor->setValue('CAMPO50', $postulante->CerIdent);
         $templateProcessor->setValue('CAMPO10', date('d/m/Y', strtotime($postulante->CerFeRe)));
@@ -237,7 +241,7 @@ class FonavisController extends Controller
         $word->Visible = 0;
         // recommend to set to 0, disables alerts like "Do you want MS Word to be the default .. etc"
         $word->DisplayAlerts = 0;
-        // open the word 2007-2013 document 
+        // open the word 2007-2013 document
         $word->Documents->Open(storage_path("/fonavis/impresion/".$CerNro.".docx"));
         // save it as word 2003
         //$word->ActiveDocument->SaveAs('newdocument.doc');
@@ -253,9 +257,9 @@ class FonavisController extends Controller
         }else{
             return response()->download(storage_path("/fonavis/impresion/".$ext.substr(rtrim($postulante->CerNro), 5).'_'.$CerNro.".pdf"));
         }
-        
-        
-        
+
+
+
     }
 
     public function generateMasivo(Request $request){
@@ -320,7 +324,7 @@ class FonavisController extends Controller
             } else {
                 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chrecibo.docx'));
             }
-            
+
             break;
             case "TI":
             if ($tipo == 1) {
@@ -347,9 +351,9 @@ class FonavisController extends Controller
         }else {
             $num=$postulante->CerPin;
         }
-        
 
-        
+
+
 
         if ($titular->PerSexo == 'M') {
             $templateProcessor->setValue('CAMPO11', ' el Señor '.rtrim($postulante->CerposNom));
@@ -377,8 +381,8 @@ class FonavisController extends Controller
                     $postulante->CerRect2Nr.' de fecha '.date('d/m/Y', strtotime($postulante->CerRect2Fe)));
                     $templateProcessor->setValue('CAMPO74', '');
                 }
-                
-            }  
+
+            }
         }
 
         switch ($postulante->CerPlzOrig) {
@@ -423,15 +427,15 @@ class FonavisController extends Controller
         }
 
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
-            
+
             if ($titular->PerSexo == 'M') {
                 $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado');
             } else {
                 $templateProcessor->setValue('CAMPO33', ' ha sido beneficiada');
             }
-            
-            
-            
+
+
+
 
         } else {
 
@@ -440,7 +444,7 @@ class FonavisController extends Controller
             } else {
             $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".rtrim($postulante->CerCoNo).', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.').', han sido beneficiados');
             //$templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
-                //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
+                //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true);
             }
         }
         //$templateProcessor->setValue('CAMPO33', $campo33);
@@ -462,13 +466,13 @@ class FonavisController extends Controller
 
         $depto = Departamento::find($postulante->CerDptoId);
         $templateProcessor->setValue('CAMPO43', $depto->DptoNom);
-        
+
         if ($postulante->CerIndert == '') {
             $templateProcessor->setValue('CAMPO55', '1061/15');
         } else {
             $templateProcessor->setValue('CAMPO55', $postulante->CerIndert);
         }
-        
+
 
         $templateProcessor->setValue('CAMPO50', $postulante->CerIdent);
         $templateProcessor->setValue('CAMPO10', date('d/m/Y', strtotime($postulante->CerFeRe)));
@@ -485,7 +489,7 @@ class FonavisController extends Controller
         $word->Visible = 0;
         // recommend to set to 0, disables alerts like "Do you want MS Word to be the default .. etc"
         $word->DisplayAlerts = 0;
-        // open the word 2007-2013 document 
+        // open the word 2007-2013 document
         $word->Documents->Open(storage_path("/fonavis/impresion/".$CerNro.".docx"));
         // save it as word 2003
         //$word->ActiveDocument->SaveAs('newdocument.doc');
@@ -495,8 +499,8 @@ class FonavisController extends Controller
         $word->Quit(false);
         // clean up
         unset($word);
-        
+
         //return response()->download(storage_path("/fonavis/impresion/".$CerNro.".pdf"));
-        
+
     }
 }
