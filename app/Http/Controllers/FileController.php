@@ -11,8 +11,8 @@ use App\Http\Controllers\SembrandoController;
 
 class FileController extends Controller
 {
-    
-    
+
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -31,8 +31,8 @@ class FileController extends Controller
     }
 
     public function imprimir($id,$tipo){
-        $cod= Subsidio::find($id); 
-        
+        $cod= Subsidio::find($id);
+
         if ($cod->CerProg == 4) {
             $controller =  new SembrandoController;
             return $controller->generateDocx($id,$tipo);
@@ -41,10 +41,14 @@ class FileController extends Controller
             $controller =  new FonavisController;
             return $controller->generateDocx($id,$tipo);
         }
-        
+        if ($cod->CerProg == 3) {
+            $controller =  new ChetapyiController;
+            return $controller->generateDocx($id,$tipo);
+        }
+
 
     }
-    
+
     public function generateDocx($id)
     {
         //$phpWord = new \PhpOffice\PhpWord\PhpWord();
@@ -55,11 +59,11 @@ class FileController extends Controller
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('/word/template.docx'));
         $num=" ";
 
-        for ($i = 0; $i<8; $i++) 
+        for ($i = 0; $i<8; $i++)
         {
-        
+
             $num .= mt_rand(0,9);
-            
+
         }
         $templateProcessor->setValue('codigo', $num);
         //$templateProcessor->setImage("macroNameImage", public_path('img/logo.png'), "logoHeader.png", 30, 30);
@@ -77,7 +81,7 @@ class FileController extends Controller
         /*Settings::setPdfRendererName(Settings::PDF_RENDERER_DOMPDF);
 // Any writable directory here. It will be ignored.
         Settings::setPdfRendererPath('.');
-        
+
         $phpWord = IOFactory::load(storage_path('resulttemplate.docx'), 'Word2007');
         $phpWord->save('document.pdf', 'PDF');*/
         //$templateProcessor = new TemplateProcessor('Template.docx');
@@ -87,7 +91,7 @@ class FileController extends Controller
         $word->Visible = 0;
         // recommend to set to 0, disables alerts like "Do you want MS Word to be the default .. etc"
         $word->DisplayAlerts = 0;
-        // open the word 2007-2013 document 
+        // open the word 2007-2013 document
         $word->Documents->Open(storage_path('resulttemplate.docx'));
         // save it as word 2003
         //$word->ActiveDocument->SaveAs('newdocument.doc');
@@ -102,7 +106,7 @@ class FileController extends Controller
         //$section = $phpWord->addSection();
 
 
-        
+
 
 
         //$section->addImage("http://itsolutionstuff.com/frontTheme/images/logo.png");
@@ -117,10 +121,10 @@ class FileController extends Controller
 
 
         return response()->download(storage_path('resulttemplate.docx'));
-        
+
     }
 
-    
+
 
     public function setImg($strKey, $img) {
         $strKey       = '${' . $strKey . '}';
