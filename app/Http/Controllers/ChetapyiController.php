@@ -81,9 +81,9 @@ class ChetapyiController extends Controller
         }
 
         if ($titular->PerSexo == 'M') {
-            $templateProcessor->setValue('CAMPO11', ' al Señor: '.rtrim($postulante->CerposNom));
+            $templateProcessor->setValue('CAMPO11', ' al Señor '.rtrim($postulante->CerposNom));
         } else {
-            $templateProcessor->setValue('CAMPO11', ' a la Señora: '.rtrim($postulante->CerposNom));
+            $templateProcessor->setValue('CAMPO11', ' a la Señora '.rtrim($postulante->CerposNom));
         }
 
         if($postulante->CerMod == "CV"){
