@@ -202,12 +202,6 @@ class FonavisController extends Controller
                 }
             }
 
-
-
-
-
-
-
         } else {
 
             if ($postulante->CerCoCI <= 150000 ) {
@@ -311,13 +305,14 @@ class FonavisController extends Controller
             }else{
                 $ext="RC";
             }
-
+            //$this->generateDocxMulti('SVS1901067',$request->input('idtipo'));
             foreach ($projects as $key => $value) {
                 //echo $value->CerNro.'</br>';
                 $this->generateDocxMulti($value->CerNro,$request->input('idtipo'));
                 //$zip->addFile(storage_path("/fonavis/impresion/".$value->CerPosCod.".pdf"));
                 $zipper->make(storage_path("/fonavis/impresion/".$name))->folder('')->add(storage_path("/fonavis/impresion/".$ext.substr(rtrim($value->CerNro), 5).'_'.rtrim($value->CerPosCod).".pdf"));
             }
+            //
             $zipper->close();
             return response()->download(storage_path("/fonavis/impresion/".$name));
     }
@@ -362,8 +357,13 @@ class FonavisController extends Controller
                 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/tirecibo.docx'));
             }
                 break;
-            case "green":
-                echo "Your favorite color is green!";
+
+                case "LP":
+                if ($tipo == 1) {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/cvtemplate.docx'));
+                } else {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/cvrecibo.docx'));
+                }
                 break;
             default:
                 //echo "Your favorite color is neither red, blue, nor green!";
@@ -382,18 +382,25 @@ class FonavisController extends Controller
         }
 
 
-
-
-        if ($titular->PerSexo == 'M') {
-            $templateProcessor->setValue('CAMPO11', ' el Señor '.rtrim($postulante->CerposNom));
+        if (!isset($titular->PerSexo)) {
+            $templateProcessor->setValue('CAMPO11', ' el Señor/a '.rtrim($postulante->CerposNom));
         } else {
-            $templateProcessor->setValue('CAMPO11', ' la Señora '.rtrim($postulante->CerposNom));
+            if ($titular->PerSexo == 'M') {
+                $templateProcessor->setValue('CAMPO11', ' el Señor '.rtrim($postulante->CerposNom));
+            } else {
+                $templateProcessor->setValue('CAMPO11', ' la Señora '.rtrim($postulante->CerposNom));
+            }
         }
 
+
         $report = Grupo::where('NucCod', '=', $postulante->CerNucCod)
-                ->where('GnuCod', '=', $postulante->CerGnuCod)
-                ->first();
-        $templateProcessor->setValue('CAMPO23', $report->GnuNom);
+            ->where('GnuCod', '=', $postulante->CerGnuCod)
+            ->first();
+            if (isset($report->GnuNom)) {
+                $templateProcessor->setValue('CAMPO23', $report->GnuNom);
+            } else {
+                $templateProcessor->setValue('CAMPO23', '');
+            }
 
         if ($postulante->CerNucNom == 0) {
             $templateProcessor->setValue('CAMPO73', '');
@@ -457,10 +464,14 @@ class FonavisController extends Controller
 
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
 
-            if ($titular->PerSexo == 'M') {
-                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado');
+            if (!isset($titular->PerSexo)) {
+                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado/a');
             } else {
-                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiada');
+                if ($titular->PerSexo == 'M') {
+                    $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado');
+                } else {
+                    $templateProcessor->setValue('CAMPO33', ' ha sido beneficiada');
+                }
             }
 
 
