@@ -43,7 +43,7 @@ class FonavisController extends Controller
         }else{
             $ext="RC";
         }
-
+//verifico modalidad
         switch ($postulante->CerMod) {
             case "CH":
                 if ($tipo == 1) {
@@ -61,6 +61,13 @@ class FonavisController extends Controller
                 }
                 break;
             case "CV":
+                if ($tipo == 1) {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/cvtemplate.docx'));
+                } else {
+                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/cvrecibo.docx'));
+                }
+                break;
+            case "LP":
                 if ($tipo == 1) {
                     $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/cvtemplate.docx'));
                 } else {
@@ -93,19 +100,34 @@ class FonavisController extends Controller
             $postulante->save();
         }
 
-        if ($titular->PerSexo == 'M') {
-            $templateProcessor->setValue('CAMPO11', ' el Señor '.rtrim($postulante->CerposNom));
+        if (!isset($titular->PerSexo)) {
+            $templateProcessor->setValue('CAMPO11', ' el Señor/a '.rtrim($postulante->CerposNom));
         } else {
-            $templateProcessor->setValue('CAMPO11', ' la Señora '.rtrim($postulante->CerposNom));
+            if ($titular->PerSexo == 'M') {
+                $templateProcessor->setValue('CAMPO11', ' el Señor '.rtrim($postulante->CerposNom));
+            } else {
+                $templateProcessor->setValue('CAMPO11', ' la Señora '.rtrim($postulante->CerposNom));
+            }
         }
+
+
+
 
         if($postulante->CerMod == "CV"){
 
         }else{
+
             $report = Grupo::where('NucCod', '=', $postulante->CerNucCod)
             ->where('GnuCod', '=', $postulante->CerGnuCod)
             ->first();
-            $templateProcessor->setValue('CAMPO23', $report->GnuNom);
+            if (isset($report->GnuNom)) {
+                $templateProcessor->setValue('CAMPO23', $report->GnuNom);
+            } else {
+                $templateProcessor->setValue('CAMPO23', '');
+            }
+
+
+
         }
 
         if ($postulante->CerNucNom == 0) {
@@ -170,11 +192,18 @@ class FonavisController extends Controller
 
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
 
-            if ($titular->PerSexo == 'M') {
-                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado');
+            if (!isset($titular->PerSexo)) {
+                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado/a');
             } else {
-                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiada');
+                if ($titular->PerSexo == 'M') {
+                    $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado');
+                } else {
+                    $templateProcessor->setValue('CAMPO33', ' ha sido beneficiada');
+                }
             }
+
+
+
 
 
 
