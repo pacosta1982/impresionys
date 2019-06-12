@@ -9,24 +9,24 @@ use App\Departamento;
 
 class SembrandoController extends Controller
 {
-    
+
     //protected $num = "";
-    
+
     public function generateCodigo(){
         $secretkey=" ";
-        for ($i = 0; $i<8; $i++) 
+        for ($i = 0; $i<8; $i++)
         {
-            $secretkey .= mt_rand(0,9);   
+            $secretkey .= mt_rand(0,9);
         }
         return $secretkey;
     }
-    
+
     public function generateDocx($id,$tipo)
     {
 
         $postulante = Subsidio::where('CerNro', $id)->first();
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/sembrando/template/CertificadoSHDSOIndiv_SEMBRANDO.docx'));
-        
+
         //var_dump($this->generateCodigo);
         $nombre = \Auth::user()->username;
 
@@ -34,8 +34,8 @@ class SembrandoController extends Controller
 
             $num=$this->generateCodigo();
             $check = Subsidio::where('CerPin', $num)->first();
-            
-            for ($i=0; $check == $num; $i++) { 
+
+            for ($i=0; $check == $num; $i++) {
                 $num=$this->generateCodigo();
                 $check = Subsidio::where('CerPin', $num)->first();
             }
@@ -54,7 +54,7 @@ class SembrandoController extends Controller
             $postulante->CerFecSus = date('Y-m-d');
             $postulante->save();*/
         }
-        
+
 
         $templateProcessor->setValue('CAMPO11', $postulante->CerposNom);
         $templateProcessor->setValue('CAMPO26', $postulante->CerNro);
@@ -66,19 +66,22 @@ class SembrandoController extends Controller
         }
 
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
-            
+
             $templateProcessor->setValue('CAMPO33', '');
             $templateProcessor->setValue('CAMPO33b', '');
 
         } else {
 
+            if($postulante->CerCoNo || $postulante->CerCoCI == 0){
+            $templateProcessor->setValue('CAMPO33', "y su cónyuge ".rtrim($postulante->CerCoNo));
+            }
             if ($postulante->CerCoCI <= 150000 ) {
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
             $cedulaconyuge = number_format((int)$postulante->CerCoCI,0,'.','.');
             $templateProcessor->setValue('CAMPO33', "y su cónyuge ".rtrim($postulante->CerCoNo).", con C.I. Nº ".$cedulaconyuge/*.', con C.I. Nº '.$postulante->CerCoCI*/);
             $templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".$cedulaconyuge);
-                //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true); 
+                //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true);
             }
         }
         //$templateProcessor->setValue('CAMPO33', $campo33);
@@ -100,13 +103,13 @@ class SembrandoController extends Controller
 
         $depto = Departamento::find($postulante->CerDptoId);
         $templateProcessor->setValue('CAMPO43', $depto->DptoNom);
-        
+
         if ($postulante->CerIndert == '') {
             $templateProcessor->setValue('CAMPO55', '1061/15');
         } else {
             $templateProcessor->setValue('CAMPO55', $postulante->CerIndert);
         }
-        
+
 
         $templateProcessor->setValue('CAMPO50', $postulante->CerIdent);
         $templateProcessor->setValue('CAMPO10', date('d/m/Y', strtotime($postulante->CerFeRe)));
@@ -123,7 +126,7 @@ class SembrandoController extends Controller
         $word->Visible = 0;
         // recommend to set to 0, disables alerts like "Do you want MS Word to be the default .. etc"
         $word->DisplayAlerts = 0;
-        // open the word 2007-2013 document 
+        // open the word 2007-2013 document
         $word->Documents->Open(storage_path("/sembrando/impresion/".$postulante->CerNro.".docx"));
         // save it as word 2003
         //$word->ActiveDocument->SaveAs('newdocument.doc');
@@ -133,9 +136,9 @@ class SembrandoController extends Controller
         $word->Quit(false);
         // clean up
         unset($word);
-        
+
         return response()->download(storage_path("/sembrando/impresion/".$postulante->CerNro.".pdf"));
-        
+
     }
 
 }
