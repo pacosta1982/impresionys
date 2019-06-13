@@ -65,14 +65,14 @@ class SembrandoController extends Controller
             $templateProcessor->setValue('CAMPO12', 'C.I. Nº '.$cedula);
         }
 
-        if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
+        if ($postulante->CerCoCI == 0 && strlen($postulante->CerCoNo) == 0 ) {
 
             $templateProcessor->setValue('CAMPO33', '');
-            $templateProcessor->setValue('CAMPO33b', '');
+            //$templateProcessor->setValue('CAMPO33b', '');
 
         } else {
 
-            if($postulante->CerCoNo || $postulante->CerCoCI == 0){
+            if(strlen($postulante->CerCoNo) != 0  && ($postulante->CerCoCI == 0 || $postulante->CerCoCI == null)){
             $templateProcessor->setValue('CAMPO33', "y su cónyuge ".rtrim($postulante->CerCoNo));
             }
             if ($postulante->CerCoCI <= 150000 ) {
@@ -80,7 +80,7 @@ class SembrandoController extends Controller
             } else {
             $cedulaconyuge = number_format((int)$postulante->CerCoCI,0,'.','.');
             $templateProcessor->setValue('CAMPO33', "y su cónyuge ".rtrim($postulante->CerCoNo).", con C.I. Nº ".$cedulaconyuge/*.', con C.I. Nº '.$postulante->CerCoCI*/);
-            $templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".$cedulaconyuge);
+            //$templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".$cedulaconyuge);
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true);
             }
         }
