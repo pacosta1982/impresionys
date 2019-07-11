@@ -72,7 +72,7 @@ class SembrandoController extends Controller
 
         } else {
 
-            if(strlen($postulante->CerCoNo) != 0  && ($postulante->CerCoCI == 0 || $postulante->CerCoCI == null)){
+            if(strlen(trim($postulante->CerCoNo)) != 0  && ($postulante->CerCoCI == 0 || $postulante->CerCoCI == null)){
             $templateProcessor->setValue('CAMPO33', "y su cónyuge ".rtrim($postulante->CerCoNo));
             }
             if ($postulante->CerCoCI <= 150000 ) {
