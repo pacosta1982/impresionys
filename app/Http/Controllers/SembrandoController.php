@@ -65,7 +65,7 @@ class SembrandoController extends Controller
             $templateProcessor->setValue('CAMPO12', 'C.I. Nº '.$cedula);
         }
 
-        if ($postulante->CerCoCI == 0 && strlen($postulante->CerCoNo) == 0 ) {
+        if ($postulante->CerCoCI == 0 && strlen(trim($postulante->CerCoNo)) == 0 ) {
 
             $templateProcessor->setValue('CAMPO33', '');
             //$templateProcessor->setValue('CAMPO33b', '');
