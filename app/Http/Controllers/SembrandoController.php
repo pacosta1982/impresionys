@@ -78,8 +78,13 @@ class SembrandoController extends Controller
             if ($postulante->CerCoCI <= 150000 ) {
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
-            $cedulaconyuge = number_format((int)$postulante->CerCoCI,0,'.','.');
-            $templateProcessor->setValue('CAMPO33', "y su cónyuge ".rtrim($postulante->CerCoNo).", con C.I. Nº ".$cedulaconyuge/*.', con C.I. Nº '.$postulante->CerCoCI*/);
+                if ($postulante->CerTDCge == 'C') {
+                    $cedulaconyuge = number_format((int)$postulante->CerCoCI,0,'.','.');
+                    $templateProcessor->setValue('CAMPO33', "y su cónyuge ".rtrim($postulante->CerCoNo).", con C.I. Nº ".$cedulaconyuge/*.', con C.I. Nº '.$postulante->CerCoCI*/);
+                }else{
+                    $templateProcessor->setValue('CAMPO33', "y su cónyuge ".rtrim($postulante->CerCoNo).", con C.I. Nº ".trim($postulante->CerCoCI));
+                }
+
             //$templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".$cedulaconyuge);
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true);
             }
