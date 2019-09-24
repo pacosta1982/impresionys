@@ -181,7 +181,7 @@ class FonavisController extends Controller
         $templateProcessor->setValue('CAMPO18', $postulante->CerReLla);
         $templateProcessor->setValue('CAMPO30', date('d/m/Y', strtotime($postulante->CerReLFe)));
 
-        $templateProcessor->setValue('CAMPO25', $postulante->CerNucNom);
+        $templateProcessor->setValue('CAMPO25', htmlspecialchars($postulante->CerNucNom));
         $templateProcessor->setValue('CAMPO26', $CerNro);
         $cedula = number_format((int)$postulante->CerPosCod,0,'.','.');
         if ($postulante->CerPosCod <= 150000 ) {
@@ -453,7 +453,7 @@ class FonavisController extends Controller
         $templateProcessor->setValue('CAMPO18', $postulante->CerReLla);
         $templateProcessor->setValue('CAMPO30', date('d/m/Y', strtotime($postulante->CerReLFe)));
 
-        $templateProcessor->setValue('CAMPO25', $postulante->CerNucNom);
+        $templateProcessor->setValue('CAMPO25', htmlspecialchars($postulante->CerNucNom));
         $templateProcessor->setValue('CAMPO26', $CerNro);
         $cedula = number_format((int)$postulante->CerPosCod,0,'.','.');
         if ($postulante->CerPosCod <= 150000 ) {
