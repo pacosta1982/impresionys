@@ -127,7 +127,7 @@ class AmaController extends Controller
         //$createdAt = Carbon::parse($postulante->CerFeRe);
         Date::setLocale('es');
         $createdAt=Date::parse($postulante->CerFeRe);
-        $templateProcessor->setValue('CAMPO10', $createdAt->format('j F \d\e Y'));
+        $templateProcessor->setValue('CAMPO10', $createdAt->format('j \d\e F \d\e Y'));
         //$templateProcessor->setValue('CAMPO10', date('d \d\e F \d\e Y ', strtotime($postulante->CerFeRe)));
         $templateProcessor->setValue('CAMPO56', date('d/m/Y'));
         //$templateProcessor->setValue('CAMPO12', $postulante->CerPosCod);
