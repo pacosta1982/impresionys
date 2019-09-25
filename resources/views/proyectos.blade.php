@@ -13,6 +13,7 @@
                     <option value="3" {{ old('progid',isset($progid)?$progid:'') == '3' ? "selected":""}}>CHE TAPYI</option>
                     <option value="4" {{ old('progid',isset($progid)?$progid:'') == '4' ? "selected":""}}>SEMBRANDO</option>
                     <option value="5" {{ old('progid',isset($progid)?$progid:'') == '5' ? "selected":""}}>EBY</option>
+                    <option value="6" {{ old('progid',isset($progid)?$progid:'') == '6' ? "selected":""}}>AMA</option>
                 </select>
             </div>
             <h4><strong>Total: {{ $projects->total() }}</strong></h4>
@@ -32,7 +33,7 @@
                     </div>
                     <input type="text" value="{{old('dateid',isset($dateid)?$dateid:'')}}"  name="dateid" id="dateid" class="form-control date"  placeholder="Ingrese Fecha">
                 </div>
-            </div>  
+            </div>
         </div>
             <div class="col-md-3">
                 <div class="form-group">
@@ -41,27 +42,27 @@
                 </div>
                 <button type="submit" class="btn btn-primary pull-right">Buscar</button>
             </div>
-            
+
         </form>
     </div>
-    
+
 </div>
 </div>
 <div class="box box-info">
     <div class="box-header with-border">
             @role('FONAVIS')
             <a href="{!! action('FonavisController@generateMasivo', ['progid' => $progid, 'resid' => $resid
-                    ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page,'idtipo'=>'1']) !!}" > 
+                    ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page,'idtipo'=>'1']) !!}" >
             <button class="btn btn-success" type="button"><i class="fa fa-print"></i> Generar Certificado </button>
             </a>
                 <a href="{!! action('FonavisController@generateMasivo', ['progid' => $progid, 'resid' => $resid
-                        ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page,'idtipo'=>'2']) !!}" > 
+                        ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page,'idtipo'=>'2']) !!}" >
                 <button class="btn btn-info" type="button"><i class="fa fa-print"></i> Generar Recibo </button>
                 </a>
             @else
-                
+
             @endrole
-        <div class="pull-right">{{ $projects->appends(request()->except('_token'))->links() }}</div>  
+        <div class="pull-right">{{ $projects->appends(request()->except('_token'))->links() }}</div>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -79,7 +80,7 @@
                 </tr>
                 </thead>
             <tbody>
-                @foreach($projects as $project)  
+                @foreach($projects as $project)
               <tr>
                 <td>{!! $project->CerNro !!}</td>
                 <td>{!! $project->CerposNom !!}</td>
@@ -88,7 +89,7 @@
                 <td style="text-align:center;">{!! date('d-m-Y', strtotime($project->CerFeRe))  !!}</td>
                 <td>{!! $name[$project->CerProg] !!}</td>
                 <td style="text-align:center;">
-                    @if ($project->CerPin == null || $project->CerPin == 0) 
+                    @if ($project->CerPin == null || $project->CerPin == 0)
                     <i class="fa fa-warning" style="color:darkorange"></i>
                     @else
                     <i class="fa fa-check" style="color:forestgreen"></i>
@@ -97,12 +98,12 @@
                 <td style="text-align:center;">
                     @if ($project->CerPin == null || $project->CerPin == 0)
                     <a href="{!! action('HomeController@previaimpresion', ['id'=>$project->CerNro, 'progid' => $progid, 'resid' => $resid
-                        ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" > 
+                        ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" >
                     <button class="btn btn-success" type="button"><i class="fa fa-print"></i> Imprimir </button>
                     </a>
                     @else
                     <a href="{!! action('HomeController@previaimpresion', ['id'=>$project->CerNro, 'progid' => $progid, 'resid' => $resid
-                        ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" > 
+                        ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" >
                     <button class="btn btn-danger block" type="button"><i class="fa fa-print"></i> Re Imprimir </button>
                     </a>
                     @endif
@@ -130,13 +131,13 @@
 <script src="{{asset('js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
 
-    $('.date').datepicker({  
+    $('.date').datepicker({
        format: 'yyyy-mm-dd',
        autoclose: 'true',
        languaje: 'es'
      });
-     
 
-</script> 
+
+</script>
 
 @stop

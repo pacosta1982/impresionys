@@ -9,7 +9,7 @@
             3 => 'CHE TAPYI',
             4 => 'SEMBRANDO',
             5 => 'EBY',
-            6 => 'COSTANERA NORTE',
+            6 => 'AMA',
     );
 
 
@@ -29,13 +29,13 @@
   <!-- info row -->
   <div class="row invoice-info">
     <div class="col-sm-4 invoice-col">
-      <strong>Titular</strong> 
+      <strong>Titular</strong>
       <address>
         Nombre: {{$subsidio->CerposNom}}<br>
         Documento: {{$subsidio->CerPosCod}}<br>
         Fecha de Adjudicación: <strong>{{date('d/m/Y', strtotime($subsidio->CerFeRe))}}</strong>
       </address>
-      
+
     </div>
     <!-- /.col -->
     <div class="col-sm-4 invoice-col">
@@ -43,7 +43,7 @@
       <address>
         Nombre: {{$subsidio->CerCoNo}}<br>
         Documento: {{$subsidio->CerCoCI}}<br>
-        
+
       </address>
     </div>
     <!-- /.col -->
@@ -54,15 +54,15 @@
           @if (isset($ciudad->CiuNom))
           Distrito: {{$ciudad->CiuNom}}<br>
           @else
-          Distrito: N/A<br>  
+          Distrito: N/A<br>
           @endif
-          
+
           @if (isset($depto->DptoNom))
           Departamento: {{$depto->DptoNom}}<br>
           @else
-          Departamento: N/A<br>  
+          Departamento: N/A<br>
           @endif
-          
+
         </address>
     </div>
     <!-- /.col -->
@@ -72,24 +72,24 @@
   <div class="row no-print">
     <div class="col-xs-12">
         @role('admin')
-        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'99']) !!}" > 
+        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'99']) !!}" >
             <button type="button" class="btn btn-danger pull-right" id="recibo" style="margin-right: 5px;">
                 <i class="fa  fa-file-word-o"></i> Word
               </button>
           </a>
           @endrole
-        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'2']) !!}" > 
+        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'2']) !!}" >
           <button type="button" class="btn btn-info pull-right" id="recibo" style="margin-right: 5px;">
               <i class="fa fa-download"></i> Imprimir Recibo
             </button>
         </a>
-        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'1']) !!}" > 
+        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'1']) !!}" >
             <button type="button" id="show" class="btn btn-success pull-right" style="margin-right: 5px;">
                 <i class="fa fa-download"></i> Imprimir Certificado
               </button>
         </a>
         <a href="{!! action('HomeController@index', ['progid' => $progid, 'resid' => $resid
-            ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" > 
+            ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" >
             <button type="button" class="btn btn-warning pull-right" style="margin-right: 5px;">
                 <i class="fa fa-download"></i> Volver
               </button>
@@ -112,7 +112,7 @@
             function() {
               $("#recibo").show();
             }, 3000);
-              
+
             });
   });
 

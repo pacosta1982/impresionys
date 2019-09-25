@@ -41,7 +41,7 @@ class HomeController extends Controller
         } else {
             //var_dump('sin cedula');
             if ($request->has(['progid', 'resid','dateid'])) {
-            
+
                 $s = $request->input('dateid');
                 $dt = new \DateTime($s);
                 $date = $dt->format('Y-d-m H:i:s.v');
@@ -51,7 +51,7 @@ class HomeController extends Controller
                 ->orderBy(DB::raw('SUBSTRING(CerNro, 4,  15)'),'asc')
                 //->sortBy('CerPosCod')
                 ->paginate(15);
-    
+
             }else {
                 $projects = Subsidio::paginate(15);
             }
@@ -64,10 +64,11 @@ class HomeController extends Controller
             3 => 'CHE TAPYI',
             4 => 'SEMBRANDO',
             5 => 'EBY',
+            6 => 'AMA',
             );
-            
-        
-        
+
+
+
 
         $progid=$request->input('progid');
         $resid=$request->input('resid');
@@ -80,7 +81,7 @@ class HomeController extends Controller
 
     public function previaimpresion($id, Request $request){
 
-        
+
         $subsidio = Subsidio::find($id);
         //var_dump($request->progid);
         $progid=$request->input('progid');

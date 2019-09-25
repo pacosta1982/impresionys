@@ -45,6 +45,10 @@ class FileController extends Controller
             $controller =  new ChetapyiController;
             return $controller->generateDocx($id,$tipo);
         }
+        if ($cod->CerProg == 6) {
+            $controller =  new AmaController;
+            return $controller->generateDocx($id,$tipo);
+        }
 
 
     }
