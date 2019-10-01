@@ -48,28 +48,21 @@ class LoginController extends Controller
         // Adldap::auth()->bind($userdn, $password);
 
         if(Adldap::auth()->attempt($username.'@senavitat', $password, $bindAsUser = true)) {
-            // the user exists in the LDAP server, with the provided password
+
 
             $user = \App\User::where($this->username(), $username)->first();
             if (!$user) {
-                // the user doesn't exist in the local database, so we have to create one
 
                 $user = new \App\User();
                 $user->username = $username;
                 $user->password = '';
 
-                // you can skip this if there are no extra attributes to read from the LDAP server
-                // or you can move it below this if(!$user) block if you want to keep the user always
-                // in sync with the LDAP server 
                 $sync_attrs = $this->retrieveSyncAttributes($username);
                 foreach ($sync_attrs as $field => $value) {
                     $user->$field = $value !== null ? $value : '';
                 }
             }
 
-            // by logging the user we create the session, so there is no need to login again (in the configured time).
-            // pass false as second parameter if you want to force the session to expire when the user closes the browser.
-            // have a look at the section 'session lifetime' in `config/session.php` for more options.
             $this->guard()->login($user, true);
             return true;
         }
