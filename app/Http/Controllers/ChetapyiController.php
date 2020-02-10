@@ -158,9 +158,9 @@ class ChetapyiController extends Controller
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
 
             if ($titular->PerSexo == 'M') {
-                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado');
+                $templateProcessor->setValue('CAMPO33', '');
             } else {
-                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiada');
+                $templateProcessor->setValue('CAMPO33', '');
             }
 
 
@@ -171,7 +171,7 @@ class ChetapyiController extends Controller
             if ($postulante->CerCoCI <= 150000 ) {
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
-            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".rtrim($postulante->CerCoNo).', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.').', han sido beneficiados');
+            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".rtrim($postulante->CerCoNo).', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.').'');
             //$templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true);
             }
