@@ -39,25 +39,27 @@ class ChetapyiController extends Controller
 
         $nombre = \Auth::user()->username;
 
-        /*if ($tipo == 1) {
+        if ($tipo == 1) {
             $ext="CS";
+            switch ($postulante->CerMod) {
+                case "AU":
+                        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/chetapyi/template/autemplate.docx'));
+                break;
+                case "PO":
+                        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/chetapyi/template/potemplate.docx'));
+                    break;
+                default:
+                    //echo "Your favorite color is neither red, blue, nor green!";
+                    return "No existe platilla";
+            }
         }else{
             $ext="RC";
-        }*/
-
-        $ext="CS";
-
-        switch ($postulante->CerMod) {
-            case "AU":
-                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/chetapyi/template/autemplate.docx'));
-            break;
-            case "PO":
-                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/chetapyi/template/potemplate.docx'));
-                break;
-            default:
-                //echo "Your favorite color is neither red, blue, nor green!";
-                return "No existe platilla";
+            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/chetapyi/template/chetapyrecibo.docx'));
         }
+
+        //$ext="CS";
+
+
 
         if ($postulante->CerPin == null || $postulante->CerPin == 0) {
 
@@ -85,6 +87,8 @@ class ChetapyiController extends Controller
         } else {
             $templateProcessor->setValue('CAMPO11', ' a la Señora '.rtrim($postulante->CerposNom));
         }
+
+        $templateProcessor->setValue('CAMPO111', rtrim($postulante->CerposNom));
 
         if($postulante->CerMod == "CV"){
 
@@ -158,9 +162,9 @@ class ChetapyiController extends Controller
         if ($postulante->CerCoCI == 0 || strlen($postulante->CerCoNo) == 0 ) {
 
             if ($titular->PerSexo == 'M') {
-                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiado');
+                $templateProcessor->setValue('CAMPO33', '');
             } else {
-                $templateProcessor->setValue('CAMPO33', ' ha sido beneficiada');
+                $templateProcessor->setValue('CAMPO33', '');
             }
 
 
@@ -171,12 +175,13 @@ class ChetapyiController extends Controller
             if ($postulante->CerCoCI <= 150000 ) {
                 //$templateProcessor->setValue('CAMPO33', 'y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I./CARNET Nº '.$postulante->CerCoCI);
             } else {
-            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".rtrim($postulante->CerCoNo).', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.').', han sido beneficiados');
+            $templateProcessor->setValue('CAMPO33', "y su cónyuge (pareja) ".rtrim($postulante->CerCoNo).', con C.I. Nº '.number_format((int)$postulante->CerCoCI,0,'.','.').'');
             //$templateProcessor->setValue('CAMPO33b', ", con C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
                 //$campo33=print_r('y su cónyuge (pareja) '.$postulante->CerCoNo.', con C.I. Nº '.$postulante->CerCoCI,true);
             }
         }
-        //$templateProcessor->setValue('CAMPO33', $campo33);
+        $templateProcessor->setValue('CAMPO133', rtrim($postulante->CerCoNo));
+        $templateProcessor->setValue('CAMPO112', "C.I. Nº ".number_format((int)$postulante->CerCoCI,0,'.','.'));
         $templateProcessor->setValue('CAMPO14', $postulante->CerResNro);
         $templateProcessor->setValue('CAMPO22', number_format($postulante->CerUsm,2,',','.'));
         if ($postulante->CerTipViv == '') {
@@ -257,7 +262,7 @@ class ChetapyiController extends Controller
 
     }
 
-    public function generateMasivo(Request $request){
+    /*public function generateMasivo(Request $request){
 
             $s = $request->input('dateid');
             $dt = new \DateTime($s);
@@ -287,10 +292,10 @@ class ChetapyiController extends Controller
             $zipper->close();
             return response()->download(storage_path("/fonavis/impresion/".$name));
     }
+*/
 
 
-
-    public function generateDocxMulti($id,$tipo)
+   /* public function generateDocxMulti($id,$tipo)
     {
 
         $postulante = Subsidio::where('CerNro', $id)->first();
@@ -304,7 +309,7 @@ class ChetapyiController extends Controller
             $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('/fonavis/template/chtemplate.docx'));
         }
 
-        $favcolor = "red";*/
+        $favcolor = "red";
 
         if ($tipo == 1) {
             $ext="CS";
@@ -496,5 +501,5 @@ class ChetapyiController extends Controller
 
         //return response()->download(storage_path("/fonavis/impresion/".$CerNro.".pdf"));
 
-    }
+    }*/
 }
