@@ -33,13 +33,13 @@ class VyarendaController extends Controller
     {
 
         $postulante = Subsidio::where('CerNro', $id)->first();
+       // return ($postulante);
         $sat = Persona::where('PerCod', $postulante->CerNucCod)->first();
         $titular = Persona::where('PerCod', $postulante->CerPosCod)->first();
         $CerNro = $postulante->CerPosCod;
         $CerNro = substr($CerNro, 0, strpos($CerNro, ' '));
 
         $nombre = \Auth::user()->username;
-
         if ($tipo == 1) {
             $ext="CS";
             switch ($postulante->CerMod) {
@@ -154,7 +154,7 @@ class VyarendaController extends Controller
         $templateProcessor->setValue('CAMPO18', $postulante->CerReLla);
         $templateProcessor->setValue('CAMPO30', date('d/m/Y', strtotime($postulante->CerReLFe)));
 
-        $templateProcessor->setValue('CAMPO25', $postulante->CerNucNom);
+        $templateProcessor->setValue('CAMPO25', $postulante->CerIdent);
         $templateProcessor->setValue('CAMPO26', $postulante->CerNro);
         $cedula = number_format((int)$postulante->CerPosCod,0,'.','.');
         if ($postulante->CerPosCod <= 150000 ) {
