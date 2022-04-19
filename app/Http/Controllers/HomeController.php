@@ -65,6 +65,7 @@ class HomeController extends Controller
             4 => 'SEMBRANDO',
             5 => 'EBY',
             6 => 'AMA',
+            7 => 'SAN FRANCISCO',
             );
 
 

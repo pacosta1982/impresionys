@@ -53,6 +53,10 @@ class FileController extends Controller
             $controller =  new VyaRendaController;
             return $controller->generateDocx($id,$tipo);
         }
+        if ($cod->CerProg == 7) {
+            $controller =  new SanFranciscoController;
+            return $controller->generateDocx($id,$tipo);
+        }
 
 
     }
