@@ -11,6 +11,10 @@ class Localidad extends Model
     protected $primaryKey = 'CiuId';
 
     public $incrementing = false;
-    
-    
+
+
+    protected $connection = 'sqlsrv';
+
+
+
 }
