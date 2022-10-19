@@ -14,6 +14,7 @@
                     <option value="4" {{ old('progid',isset($progid)?$progid:'') == '4' ? "selected":""}}>SEMBRANDO</option>
                     <option value="5" {{ old('progid',isset($progid)?$progid:'') == '5' ? "selected":""}}>EBY</option>
                     <option value="6" {{ old('progid',isset($progid)?$progid:'') == '6' ? "selected":""}}>AMA</option>
+                    <option value="7" {{ old('progid',isset($progid)?$progid:'') == '7' ? "selected":""}}>SAN FRANCISCO</option>
                 </select>
             </div>
             <h4><strong>Total: {{ $projects->total() }}</strong></h4>

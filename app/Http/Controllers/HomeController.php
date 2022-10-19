@@ -36,7 +36,7 @@ class HomeController extends Controller
         var_dump($request->input('cedula'));*/
 
         if ($request->input('cedula')) {
-            $projects= Subsidio::where('CerPosCod', $request->input('cedula'))->paginate(15);
+            $projects= Subsidio::where('CerPosCod', $request->input('cedula'))->where ('CerEst','=','1')->paginate(15);
 
         } else {
             //var_dump('sin cedula');
@@ -65,6 +65,7 @@ class HomeController extends Controller
             4 => 'SEMBRANDO',
             5 => 'EBY',
             6 => 'AMA',
+            7 => 'SAN FRANCISCO',
             );
 
 

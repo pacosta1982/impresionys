@@ -10,6 +10,7 @@
             4 => 'SEMBRANDO',
             5 => 'EBY',
             6 => 'AMA',
+            7 => 'SAN FRANCISCO',
     );
 
 
@@ -83,11 +84,24 @@
               <i class="fa fa-download"></i> Imprimir Recibo
             </button>
         </a>
+        @if($subsidio->CerMod == "VR")
+        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'1']) !!}" >
+            <button type="button" id="show" class="btn btn-success pull-right" style="margin-right: 5px;">
+                <i class="fa fa-download"></i> Imprimir Resolucion 1304
+              </button>
+        </a>
+        <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'3']) !!}" >
+            <button type="button" id="show" class="btn btn-success pull-right" style="margin-right: 5px;">
+                <i class="fa fa-download"></i> Imprimir Resolucion 1378
+              </button>
+        </a>
+        @else
         <a href="{!! action('FileController@imprimir', ['id'=>$subsidio->CerNro,'idtipo'=>'1']) !!}" >
             <button type="button" id="show" class="btn btn-success pull-right" style="margin-right: 5px;">
                 <i class="fa fa-download"></i> Imprimir Certificado
               </button>
         </a>
+        @endif
         <a href="{!! action('HomeController@index', ['progid' => $progid, 'resid' => $resid
             ,'dateid' => $dateid,'cedula' => $cedula,'page' => $page]) !!}" >
             <button type="button" class="btn btn-warning pull-right" style="margin-right: 5px;">
